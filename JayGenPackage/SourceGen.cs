@@ -8,21 +8,29 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace JayGenPackage
 {
+    [Guid("FD5B68E5-3B43-49EB-A7F1-CE25471E2C15")]
     public class SourceGen : BaseCodeGeneratorWithSite
     {
-        public const string Name = "JaySourceGenerator";
+        public const string Name = "JayGen";
 
         public const string Description = "WJay source generator";
 
         public const string PanelGuid = "B25D2171-ACA7-4B62-B2E4-96DB0A8A595D";
 
         public override string GetDefaultExtension() => ".cs";
+
+        public SourceGen()
+        {
+            return;
+        }
    
         protected override byte[] GenerateCode(string inputFileName, string inputFileContent)
         {
+            ThreadHelper.ThrowIfNotOnUIThread();
             try
             {
                 Process process = new Process();

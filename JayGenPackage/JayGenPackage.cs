@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextTemplating.VSHost;
 using System;
 using System.Runtime.InteropServices;
@@ -7,17 +8,17 @@ using Task = System.Threading.Tasks.Task;
 
 namespace JayGenPackage
 {
+    [Guid("5BF0DC07-AA56-4A9D-AC92-CE6CE076E2D4")]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-    [Guid(JayGenPackagePackage.PackageGuidString)]
-    [ProvideCodeGenerator(typeof(SourceGen), SourceGen.Name, SourceGen.Description, true, RegisterCodeBase = true)]
+    [InstalledProductRegistration(SourceGen.Description, "", "1.1")]
+    [ProvideCodeGenerator(typeof(SourceGen), SourceGen.Name, SourceGen.Description, true)]
     [ProvideCodeGeneratorExtension(SourceGen.Name, ".y")]
-    public sealed class JayGenPackagePackage : AsyncPackage
+    [ProvideCodeGeneratorExtension(SourceGen.Name, ".abc")]
+    public sealed class JayGenPackage : AsyncPackage
     {
         /// <summary>
         /// JayGenPackagePackage GUID string.
         /// </summary>
-        public const string PackageGuidString = "13a996c0-40e9-4d6f-bfbd-a55303c2b666";
-
         #region Package Members
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace JayGenPackage
         {
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
-            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
         }
 
         #endregion
